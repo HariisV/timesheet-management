@@ -8,6 +8,7 @@ const { generateToken, isTokenValid } = require('#utils');
 
 const update = async (req, res, next) => {
   try {
+    const { id } = req.user;
     const schema = Joi.object({
       email: Joi.string().email().required(),
       password: Joi.string().min(8).allow(''),
@@ -21,17 +22,30 @@ const update = async (req, res, next) => {
       validate.password = bcrypt.hashSync(validate.password, 10);
     }
 
-    const user = await database.User.create({
-      ...validate,
+    const user = await database.User.findOne({
+      where: {
+        id,
+      },
     });
 
-    delete user.dataValues.password;
+    if (!user) {
+      throw new BadRequestError('User tidak terdaftar');
+    }
+
+    await user.update(validate);
+
+    const result = await database.User.findOne({
+      where: {
+        id,
+      },
+    });
+
     res.status(StatusCodes.CREATED).json({
       data: {
-        ...user.dataValues,
-        token: generateToken(user),
+        ...result.dataValues,
+        token: generateToken(result),
       },
-      msg: 'Berhasil mendaftar',
+      msg: 'Berhasil Mengupdate User',
     });
   } catch (error) {
     next(error);
