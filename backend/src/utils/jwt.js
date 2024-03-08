@@ -6,6 +6,8 @@ const generateToken = (payload) => {
   const result = {
     id: payload.id,
   };
+
+  delete payload.password;
   return jwt.sign(result, process.env.JWT_SECRET, {
     expiresIn: '1d',
   });

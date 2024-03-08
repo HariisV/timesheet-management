@@ -6,8 +6,8 @@ const logger = require('morgan');
 const app = express();
 const routes = require('./src/routes');
 
-const notFoundMiddleware = require('./src/errors/middlewares/not-found');
-const handleErrorMiddleware = require('./src/errors/middlewares/handle-error');
+const notFoundMiddleware = require('./src/middlewares/not-found');
+const handleErrorMiddleware = require('./src/middlewares/handle-error');
 
 require('dotenv').config();
 
