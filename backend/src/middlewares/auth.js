@@ -1,4 +1,4 @@
-const { UnauthenticatedError, UnauthorizedError } = require('..');
+const { UnauthenticatedError, UnauthorizedError } = require('#errors/index.js');
 const { isTokenValid } = require('#utils');
 const database = require('#database');
 
